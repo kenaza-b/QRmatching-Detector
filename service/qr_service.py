@@ -30,7 +30,10 @@ def detect_qr_from_pdf_service(pdf_file, reference_text):
         page = doc.load_page(0)
         pix = page.get_pixmap(dpi=300)
         img = Image.open(BytesIO(pix.tobytes("ppm")))
-        img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+        # Améliorer l'image avant détection QR
+        from .qr_imageEnhancing_service import enchangeImage  # import relatif si besoin
+        enhanced_img = enchangeImage(img)  # Assurez-vous que la fonction retourne l'image améliorée
+        img_cv = cv2.cvtColor(np.array(enhanced_img), cv2.COLOR_RGB2BGR)
     except Exception as e:
         return {"error": f"Erreur conversion page en image : {str(e)}", "status": 500}
 
